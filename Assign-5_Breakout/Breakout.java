@@ -1,6 +1,5 @@
 import java.awt.Color;
 import java.awt.event.MouseEvent;
-
 import acm.graphics.GLabel;
 import acm.graphics.GObject;
 import acm.graphics.GOval;
@@ -8,15 +7,9 @@ import acm.graphics.GRect;
 import acm.program.GraphicsProgram;
 import acm.util.RandomGenerator;
 
-/**
- * MIT License (http://choosealicense.com/licenses/mit/)
+/*
+ * Simple Breakout Game
  * 
- * 
- * Agrar: Breakout
- * 
- * A simple version of the Breakout game.
- * 
- * @see http://www.VariationenZumThema.de/
  * @author Daniel Reckziegel
  */
 
@@ -44,8 +37,8 @@ public class Breakout extends GraphicsProgram {
 	GOval livePoint;
 	GLabel labelScore;
 	GLabel labelLive;
-	int vx = 5;
-	int vy = 5;
+	int vx = 3;
+	int vy = 3;
 	int lives = 3;
 	int score = 0;
 
@@ -53,7 +46,7 @@ public class Breakout extends GraphicsProgram {
 		setup();
 		waitForClick();
 		createCountdown();
-		/** game loop */
+		/* game loop */
 		while (true) {
 			moveBall();
 			checkForCollisionBallWithWall();
@@ -64,7 +57,7 @@ public class Breakout extends GraphicsProgram {
 		}
 	}
 
-	/** Setup Methode in der alle anderen Methoden ausgeführt werden */
+	/* setup method */
 	private void setup() {
 		setSize(CANVAS_WIDTH, CANVAS_HEIGHT);
 		setBackground(Color.BLACK);
@@ -93,7 +86,7 @@ public class Breakout extends GraphicsProgram {
 		}
 	}
 
-	/** Methode um einen Countdown zu erzeugen, bevor der Ball losfährt */
+	/* method to create the countdown */
 	private void createCountdown() {
 		GLabel ready = new GLabel("READY");
 		ready.setColor(Color.WHITE);
@@ -121,7 +114,7 @@ public class Breakout extends GraphicsProgram {
 
 	}
 
-	/** Methode um 3 Leben oben links im Eck zu erzeugen */
+	/* method to create the 3 lifes in the top left corner */
 	private void createLives() {
 		int livePosX = 20;
 		int livePosY = 35;
@@ -150,10 +143,7 @@ public class Breakout extends GraphicsProgram {
 		livePosX = livePosX + 20;
 	}
 
-	/**
-	 * Methode welche den Ball nach Collision mit den Bricks umkehren lässt und
-	 * einen Brick entfernt
-	 */
+	/* method for the collision with the bricks */
 	private void checkForCollisionBallWithBricks() {
 		double x = ball.getX();
 		double y = ball.getY();
@@ -171,7 +161,7 @@ public class Breakout extends GraphicsProgram {
 		}
 	}
 
-	/** Methode welche den Ball nach Collision mit dem Paddle umkehren lässt */
+	/* method to check for collision with the paddle */
 	private void checkForCollisionBallWithPaddle() {
 		double x = ball.getX();
 		double y = ball.getY();
@@ -184,10 +174,7 @@ public class Breakout extends GraphicsProgram {
 		}
 	}
 
-	/**
-	 * Methode welche den Ball nach Collision mit den Wänden umkehren lässt,
-	 * außer unten
-	 */
+	/* method to check for collision with the walls, except the bottom wall */
 	private void checkForCollisionBallWithWall() {
 		if ((ball.getX() > CANVAS_WIDTH - BALL_SIZE) || (ball.getX() < 0)) {
 			vx = -vx;
@@ -196,10 +183,8 @@ public class Breakout extends GraphicsProgram {
 			vy = -vy;
 		}
 
-		/**
-		 * Wenn der Ball unten rausgeht zieht es ein Leben ab und es wird ein
-		 * Lebenspunkt entfernt bis man GameOver ist
-		 */
+		// If the ball goes out at the bottom it takes a life and it is removed until
+		// you are GameOver
 		if ((ball.getY() > CANVAS_HEIGHT)) {
 			lives = lives - 1;
 			if (lives == 2) {
@@ -221,14 +206,14 @@ public class Breakout extends GraphicsProgram {
 		}
 	}
 
-	/** Methode welche nach einem verlorenen Leben das spiel neu startet (3 mal) */
+	/* method which restarts the game after a lost life (3 times) */
 	private void threeLivesMethod() {
 		createCountdown();
 		createBall();
 		moveBall();
 	}
 
-	/** Methode zur Erzeugung des Paddles */
+	/* method to create the paddle */
 	private void createPaddle() {
 		paddle = new GRect(PADDLE_LENGTH, PADDLE_HEIGTH);
 		paddle.setColor(Color.WHITE);
@@ -236,13 +221,13 @@ public class Breakout extends GraphicsProgram {
 		add(paddle, 140, 600);
 	}
 
-	/** Methode zur Erzeugung des Mousetrackers für das Paddle */
+	/* Method for generating the mouse tracker for the paddle */
 	public void mouseMoved(MouseEvent e) {
 		int x = e.getX();
 		paddle.setLocation(x, 600);
 	}
 
-	/** Methode zur Erzeugung der Wall mit den einzelnen Steinen */
+	/* Method for creating the wall with the individual bricks */
 	private void createWall() {
 		int y = START_WALL_Y;
 		for (int i = 0; i < NR_OF_ROWS; i++) {
@@ -251,7 +236,7 @@ public class Breakout extends GraphicsProgram {
 		}
 	}
 
-	/** Methode zur Erzeugung einer Reihe an Bricks für die Wall */
+	/* Method for creating a series of bricks for the wall */
 	private void drawOneRow(int y) {
 		int x = START_WALL_X;
 		for (int i = 0; i < NR_OF_COLUMS; i++) {
@@ -265,7 +250,7 @@ public class Breakout extends GraphicsProgram {
 		}
 	}
 
-	/** Methode zur Erzeugung des Balls */
+	/* method to create the ball */
 	public void createBall() {
 		ball = new GOval(BALL_SIZE, BALL_SIZE);
 		ball.setColor(Color.WHITE);
@@ -273,7 +258,7 @@ public class Breakout extends GraphicsProgram {
 		add(ball, 180, 380);
 	}
 
-	/** Methode damit der Ball läuft */
+	/* method that makes the ball move */
 	private void moveBall() {
 		ball.move(vx, vy);
 	}
